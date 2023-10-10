@@ -24,9 +24,15 @@ const jwt = require('jsonwebtoken');
 
 // IMPORT Bcryptjs for password protection
 const bcrypt = require('bcryptjs');
-
 const bcryptSalt = bcrypt.genSaltSync(10);
 const jwtSecret = 'naln4wlsknos5clasm8flw2sel';
+
+// IMPORT Stripe
+const stripe = require('stripe')('sk_test_51McbK7EoEvigZp72NE7nxjntkhrEn1vYrryYSqHzD0lPcBNRbSQ80VGq4WD59r70vJCeu8crmhGdiJi1s5JbVnzP00wfddr71D');
+
+// IMPORT uuid
+const { v4: uuidv4 } = require('uuid');
+uuidv4(); // ⇨ '1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed'
 
 
 // GRAB USER DATA FUNCTION
@@ -232,17 +238,7 @@ module.exports = {
     createBooking: async (req, res) => {
         const userData = await getUserDataFromReq(req);
         const {
-            vehicleRental,
-            checkIn,
-            checkOut,
-            name,
-            email,
-            phoneNumber,
-            totalHours,
-            totalPrice
-        } = req.body;
-
-        await Booking.create({
+            token,
             vehicleRental,
             checkIn,
             checkOut,
@@ -251,14 +247,46 @@ module.exports = {
             phoneNumber,
             totalHours,
             totalPrice,
-            user: userData.id
+            transactionId
+        } = req.body;
+
+        const customer = await stripe.customers.create({
+            email: token.email,
+            source: token.id
         })
-            .then((doc) => {
-                res.json(doc);
+
+        const payment = await stripe.charges.create({
+            amount: totalPrice * 100,
+            currency: 'usd',
+            customer: customer.id,
+            receipt_email: token.email
+        }, {
+            idempotencyKey: uuidv4()
+        })
+
+        if (payment) {
+            await Booking.create({
+                vehicleRental,
+                checkIn,
+                checkOut,
+                name,
+                email,
+                phoneNumber,
+                totalHours,
+                totalPrice,
+                transactionId: req.body.transactionId = payment.source.id,
+                user: userData.id
             })
-            .catch((err) => {
-                throw err;
-            })
+                .then((doc) => {
+                    res.json(doc);
+                })
+                .catch((err) => {
+                    throw err;
+                })
+        }
+        else {
+            return res.status(400).json(error);
+        }
     },
 
     // READ ALL User Vehicle Rental Bookings

@@ -38,6 +38,10 @@ const bookingSchema = new mongoose.Schema({
     totalPrice: {
         type: Number,
         required: [true, '{PATH} is required']
+    },
+    transactionId: {
+        type: String,
+        required: [true, '{PATH} is required']
     }
 }, { timestamps: true })
 

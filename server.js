@@ -10,7 +10,7 @@ const cors = require('cors');
 const app = express();
 
 // Establish PORT number >>> global variable by convention should be all caps (PORT)
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 // Declaring DB that'll be used for app
 const DB = 'cncauto';

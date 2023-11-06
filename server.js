@@ -42,22 +42,22 @@ app.use(cors({
     // Localhost 
     // origin: 'http://localhost:5173'
     // AWS EC2
-    // origin: 'http://52.10.71.141/'
+    origin: 'http://52.10.71.141/'
     // Linode
-    origin: 'http://172.232.170.81'
+    // origin: 'http://172.232.170.81/'
 }));
 
-if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, '../client/dist')));
+// if (process.env.NODE_ENV === 'production') {
+//     app.use(express.static(path.join(__dirname, '../client/dist')));
 
-    app.get('*', (req, res) =>
-    res.sendFile(
-        path.resolve(__dirname, '../', 'client', 'dist', 'index.html')
-        )
-    );
-} else {
-    app.get('/', (req, res) => res.send('Please set to production'));
-}
+//     app.get('*', (req, res) =>
+//     res.sendFile(
+//         path.resolve(__dirname, '../', 'client', 'dist', 'index.html')
+//         )
+//     );
+// } else {
+//     app.get('/', (req, res) => res.send('Please set to production'));
+// }
 
 
 

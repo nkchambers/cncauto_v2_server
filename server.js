@@ -27,6 +27,9 @@ const multer = require('multer');
 // IMPORT fs - file system library
 const fs = require('fs');
 
+// IMPORT path
+const path = require('path');
+
 
 
 
@@ -41,11 +44,28 @@ app.use(cors({
     credentials: true,
     // Localhost 
     // origin: 'http://localhost:5173'
+    origin: '*'
     // AWS EC2
-    origin: 'http://52.10.71.141/'
+    // origin: 'http://52.10.71.141/'
     // Linode
     // origin: 'http://172.232.170.81/'
 }));
+
+const __dirname = path.dirname('')
+const buildPath = path.join(__dirname , '../client/dist');
+
+app.use(express.static(buildPath))
+
+app.get('/*', function(req, res) {
+    res.sendFile(
+        path.join(__dirname, '../client/dist/index.html'),
+        function (err) {
+            if (err) {
+                res.status(500).send(err);
+            }
+        }
+    );
+})
 
 // if (process.env.NODE_ENV === 'production') {
 //     app.use(express.static(path.join(__dirname, '../client/dist')));

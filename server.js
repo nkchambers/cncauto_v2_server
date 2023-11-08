@@ -43,41 +43,14 @@ app.use('/uploads', express.static(__dirname + '/uploads'));
 app.use(cors({
     credentials: true,
     // Localhost 
-    // origin: 'http://localhost:5173'
-    origin: '*'
+    origin: 'http://localhost:5173'
+    // origin: '*'
     // AWS EC2
     // origin: 'http://52.10.71.141/'
     // Linode
     // origin: 'http://172.232.170.81/'
 }));
 
-const __dirname1 = path.dirname('')
-const buildPath = path.join(__dirname1 , '../client/dist');
-
-app.use(express.static(buildPath))
-
-app.get('/*', function(req, res) {
-    res.sendFile(
-        path.join(__dirname1, '../client/dist/index.html'),
-        function (err) {
-            if (err) {
-                res.status(500).send(err);
-            }
-        }
-    );
-})
-
-// if (process.env.NODE_ENV === 'production') {
-//     app.use(express.static(path.join(__dirname, '../client/dist')));
-
-//     app.get('*', (req, res) =>
-//     res.sendFile(
-//         path.resolve(__dirname, '../', 'client', 'dist', 'index.html')
-//         )
-//     );
-// } else {
-//     app.get('/', (req, res) => res.send('Please set to production'));
-// }
 
 
 

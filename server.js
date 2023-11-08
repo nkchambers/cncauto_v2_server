@@ -51,7 +51,7 @@ app.use(cors({
     // origin: 'http://172.232.170.81/'
 }));
 
-let __dirname = path.dirname('')
+// let __dirname = path.dirname('')
 const buildPath = path.join(__dirname , '../client/dist');
 
 app.use(express.static(buildPath))

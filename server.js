@@ -51,14 +51,14 @@ app.use(cors({
     // origin: 'http://172.232.170.81/'
 }));
 
-// let __dirname = path.dirname('')
-const buildPath = path.join(__dirname , '../client/dist');
+const __dirname1 = path.dirname('')
+const buildPath = path.join(__dirname1 , '../client/dist');
 
 app.use(express.static(buildPath))
 
 app.get('/*', function(req, res) {
     res.sendFile(
-        path.join(__dirname, '../client/dist/index.html'),
+        path.join(__dirname1, '../client/dist/index.html'),
         function (err) {
             if (err) {
                 res.status(500).send(err);

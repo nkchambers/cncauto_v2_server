@@ -27,9 +27,6 @@ const multer = require('multer');
 // IMPORT fs - file system library
 const fs = require('fs');
 
-// IMPORT path
-const path = require('path');
-
 
 
 
